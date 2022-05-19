@@ -32,7 +32,7 @@ jobs:
 
       - name: Determine Image Tags
         id: tags
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v4
         with:
           images: ${{ secrets.ACR_LOGIN_SERVER }}/${{ env.IMAGE_BASENAME }}
           sep-tags: ','
