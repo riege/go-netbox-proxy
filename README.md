@@ -3,6 +3,7 @@
 ## Authors
 
 - [@twink0r - Alexander Karl](https://github.com/twink0r)
+- [@Riege Software International GmbH](https://github.com/riege)
 
 ## State
 
