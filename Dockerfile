@@ -10,4 +10,6 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags '-w -extldflags "-st
 FROM gcr.io/distroless/static:latest-amd64
 COPY --from=build /go/bin/go-netbox-proxy /
 
+LABEL org.opencontainers.image.source https://github.com/riege/go-netbox-proxy
+
 CMD ["/go-netbox-proxy"]
