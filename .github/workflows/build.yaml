@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 env:
-  IMAGE_BASENAME: 'go-netbox-proxy'
+  IMAGE_BASENAME: 'riege/go-netbox-proxy'
 
 jobs:
   build:
@@ -26,15 +26,15 @@ jobs:
       - name: Login to Container Registry
         uses: docker/login-action@v2
         with:
-          registry: ${{ secrets.ACR_LOGIN_SERVER }}
-          username: ${{ secrets.ACR_USERNAME }}
-          password: ${{ secrets.ACR_PASSWORD }}
+          registry: ${{ secrets.GHCR_LOGIN_SERVER }}
+          username: ${{ secrets.GHCR_USERNAME }}
+          password: ${{ secrets.GHCR_PAT }}
 
       - name: Determine Image Tags
         id: tags
         uses: docker/metadata-action@v4
         with:
-          images: ${{ secrets.ACR_LOGIN_SERVER }}/${{ env.IMAGE_BASENAME }}
+          images: ${{ secrets.GHCR_LOGIN_SERVER }}/${{ env.IMAGE_BASENAME }}
           sep-tags: ','
           flavor: |
             latest=false
