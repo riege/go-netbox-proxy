@@ -39,6 +39,6 @@ sub vcl_recv {
 
 **Cloud:** Kubernetes, OCI
 
-## Feedback
+## Contributing to this project
 
-If you have any feedback, please reach out to us at Riege Software Teams @ Core Channel
+We welcome community contributions to this project. Feel free to create [issues](https://github.com/riege/go-netbox-proxy/issues) and [pull requests](https://github.com/riege/go-netbox-proxy/pulls).
