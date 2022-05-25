@@ -1,6 +1,10 @@
 ---
 name: Tag and Push Container on Release
 
+permissions:
+  contents: read
+  packages: write
+
 on:
   push:
     tags:
@@ -12,9 +16,6 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
 
     steps:
       - uses: actions/checkout@v3
