@@ -28,6 +28,10 @@ jobs:
 
       - uses: actions/setup-go@v3
 
+      # required for GitHub caching
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
       - name: Login to Container Registry
         uses: docker/login-action@v2
         with:
@@ -53,3 +57,5 @@ jobs:
           context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
