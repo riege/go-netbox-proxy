@@ -1,3 +1,4 @@
+---
 name: Build and Push Container
 
 on:
@@ -32,8 +33,8 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: ${{ secrets.GHCR_LOGIN_SERVER }}
-          username: ${{ secrets.GHCR_USERNAME }}
-          password: ${{ secrets.GHCR_PAT }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Determine Image Tags
         id: tags
