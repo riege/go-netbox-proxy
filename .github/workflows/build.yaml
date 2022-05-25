@@ -36,7 +36,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Determine Image Tags
-        id: tags
+        id: meta
         uses: docker/metadata-action@v4
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
@@ -52,4 +52,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/riege/go-netbox-proxy:pr-14
+          tags: ${{ steps.meta.outputs.tags }}
