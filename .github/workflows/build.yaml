@@ -52,4 +52,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/riege/go-netbox-proxy:test1
+          tags: ghcr.io/riege/go-netbox-proxy:pr-14
