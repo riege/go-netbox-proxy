@@ -1,5 +1,5 @@
 # Start by building the application.
-FROM golang:1.18.2-buster as build
+FROM golang:1.18.3-buster as build
 
 WORKDIR /go/src/go-netbox-proxy
 COPY . /go/src/go-netbox-proxy
