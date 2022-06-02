@@ -1,3 +1,6 @@
+# yamllint disable-file
+# This file is not valid YAML because it is a Go template
+---
 {{- if .Values.autoscaling.enabled }}
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler

@@ -8,3 +8,6 @@ on:
 jobs:
   call-lint-workflow:
     uses: "riege/code-quality/.github/workflows/super-linter.yml@main"
+
+env:
+  VALIDATE_KUBERNETES_KUBEVAL: false
