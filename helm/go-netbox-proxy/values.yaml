@@ -1,6 +1,11 @@
 # Default values for go-netbox-proxy.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+# Source: templates/deployment.yaml
+# Source: templates/hpa.yaml
+# Source: templates/ingress.yaml
+# Source: templates/service.yaml
+# Source: templates/serviceaccount.yaml
 
 netbox:
   upstream_url: https://demo.netbox.dev
