@@ -1,0 +1,18 @@
+# yamllint disable-file
+# This file is not valid YAML because it is a Go template
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "go-netbox-proxy.fullname" . }}
+  labels:
+    {{- include "go-netbox-proxy.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "go-netbox-proxy.selectorLabels" . | nindent 4 }}

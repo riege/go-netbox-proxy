@@ -1,0 +1,18 @@
+# yamllint disable-file
+# This file is not valid YAML because it is a Go template
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "go-netbox-proxy.fullname" . }}-test-connection"
+  labels:
+    {{- include "go-netbox-proxy.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "go-netbox-proxy.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
