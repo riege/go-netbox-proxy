@@ -29,12 +29,10 @@ func (h *HttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			b, _ := ioutil.ReadAll(r.Body)
 
 			// Compile the regex
-			var re = regexp.MustCompile(`"created":"(?:.+?)",`)
+			var re = regexp.MustCompile(`(\d{4}-\d\d-\d\d)T\d\d:\d\d:\d\d(\.\d+)?(([+-]\d\d:\d\d)|Z)?`)
 
 			// Replace the current created datetime by a fake date
-			b = re.ReplaceAllFunc(b, func(s []byte) []byte {
-				return []byte(`"created":"2020-01-01",`)
-			})
+			b = re.ReplaceAll(b, []byte("$1"))
 			buf := bytes.NewBuffer(b)
 
 			// Replace the body with our new body
