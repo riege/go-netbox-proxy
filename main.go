@@ -13,20 +13,34 @@ import (
 	"strings"
 )
 
-type HttpHandler struct{}
-var upstream *url.URL
+type HTTPHandler struct {
+	overwriteHost *bool
+	upstream      *url.URL
+}
 
-func (h *HttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h *HTTPHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
-	r.Host = upstream.Host
-	r.URL.Scheme = upstream.Scheme
-	proxy := httputil.NewSingleHostReverseProxy(upstream)
+	var host string
+	if *h.overwriteHost {
+		host = h.upstream.Host
+	} else {
+		host = r.Host
+	}
+
+	r.Host = host
+	r.URL.Scheme = h.upstream.Scheme
+	proxy := httputil.NewSingleHostReverseProxy(h.upstream)
 	proxy.ModifyResponse = func(r *http.Response) error {
 
 		if strings.Contains(r.Request.URL.Path, "/api/") {
 
 			// Read the response body
-			b, _ := ioutil.ReadAll(r.Body)
+			b, err := ioutil.ReadAll(r.Body)
+
+			if err != nil {
+				log.Printf("Error reading response body: %s", err.Error())
+				return err
+			}
 
 			// Compile the regex
 			var re = regexp.MustCompile(`"created":"(?:.+?)",`)
@@ -58,6 +72,7 @@ func main() {
 	// Parse flags
 	addr := flag.String("addr", ":8080", "proxy listen address")
 	up := flag.String("upstream", "", "upstream http address")
+	overwritehost := flag.Bool("overwritehost", false, "overwrite host header")
 	flag.Parse()
 
 	// Parse upstream url
@@ -67,16 +82,14 @@ func main() {
 		log.Fatal(err.Error())
 	}
 
-	// Set upstream
-	upstream = parsedUpstream
-
 	// Setup the reverse proxy server
-	httpHandler := &HttpHandler{}
+	httpHandler := &HTTPHandler{}
+	httpHandler.upstream = parsedUpstream
+	httpHandler.overwriteHost = overwritehost
 	http.Handle("/", httpHandler)
 	err = http.ListenAndServe(*addr, nil)
 
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-
 }
