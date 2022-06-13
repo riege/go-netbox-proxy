@@ -35,7 +35,12 @@ func (h *HttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		if strings.Contains(r.Request.URL.Path, "/api/") {
 
 			// Read the response body
-			b, _ := ioutil.ReadAll(r.Body)
+			b, err := ioutil.ReadAll(r.Body)
+
+			if err != nil {
+				log.Printf("Error reading response body: %s", err.Error())
+				return err
+			}
 
 			// Compile the regex
 			var re = regexp.MustCompile(`"created":"(?:.+?)",`)
