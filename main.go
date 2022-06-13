@@ -13,12 +13,12 @@ import (
 	"strings"
 )
 
-type HttpHandler struct {
+type HTTPHandler struct {
 	overwriteHost *bool
 	upstream *url.URL
 }
 
-func (h *HttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h *HTTPHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	var host string
 	if *h.overwriteHost{
@@ -83,7 +83,7 @@ func main() {
 	}
 
 	// Setup the reverse proxy server
-	httpHandler := &HttpHandler{}
+	httpHandler := &HTTPHandler{}
 	httpHandler.upstream = parsedUpstream
 	httpHandler.overwriteHost = overwritehost
 	http.Handle("/", httpHandler)
