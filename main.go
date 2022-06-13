@@ -15,6 +15,7 @@ import (
 
 type HttpHandler struct {
 	overwriteHost *bool
+	upstream *url.URL
 }
 
 func (h *HttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -27,6 +28,8 @@ func (h *HttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	r.Host = host
+	r.URL.Scheme = h.upstream.Scheme
+	proxy := httputil.NewSingleHostReverseProxy(h.upstream)
 	proxy.ModifyResponse = func(r *http.Response) error {
 
 		if strings.Contains(r.Request.URL.Path, "/api/") {
@@ -74,11 +77,9 @@ func main() {
 		log.Fatal(err.Error())
 	}
 
-	// Set upstream
-	upstream = parsedUpstream
-
 	// Setup the reverse proxy server
 	httpHandler := &HttpHandler{}
+	httpHandler.upstream = parsedUpstream
 	httpHandler.overwriteHost = overwritehost
 	http.Handle("/", httpHandler)
 	err = http.ListenAndServe(*addr, nil)
@@ -86,5 +87,4 @@ func main() {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-
 }
