@@ -13,14 +13,20 @@ import (
 	"strings"
 )
 
-type HttpHandler struct{}
-var upstream *url.URL
+type HttpHandler struct {
+	overwriteHost *bool
+}
 
 func (h *HttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
-	r.Host = upstream.Host
-	r.URL.Scheme = upstream.Scheme
-	proxy := httputil.NewSingleHostReverseProxy(upstream)
+	var host string
+	if *h.overwriteHost{
+		host = h.upstream.Host
+	} else {
+		host = r.Host
+	}
+
+	r.Host = host
 	proxy.ModifyResponse = func(r *http.Response) error {
 
 		if strings.Contains(r.Request.URL.Path, "/api/") {
@@ -58,6 +64,7 @@ func main() {
 	// Parse flags
 	addr := flag.String("addr", ":8080", "proxy listen address")
 	up := flag.String("upstream", "", "upstream http address")
+	overwritehost := flag.Bool("overwritehost", false, "overwrite host header")
 	flag.Parse()
 
 	// Parse upstream url
@@ -72,6 +79,7 @@ func main() {
 
 	// Setup the reverse proxy server
 	httpHandler := &HttpHandler{}
+	httpHandler.overwriteHost = overwritehost
 	http.Handle("/", httpHandler)
 	err = http.ListenAndServe(*addr, nil)
 
