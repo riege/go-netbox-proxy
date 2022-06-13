@@ -15,13 +15,13 @@ import (
 
 type HTTPHandler struct {
 	overwriteHost *bool
-	upstream *url.URL
+	upstream      *url.URL
 }
 
 func (h *HTTPHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	var host string
-	if *h.overwriteHost{
+	if *h.overwriteHost {
 		host = h.upstream.Host
 	} else {
 		host = r.Host
